@@ -17,32 +17,35 @@ class Cart extends Component {
 	closeModal() {
 		this.setState({modalIsOpen: false});
 	}
+
 	render() {
 		let total = 0;
+		let totalQuantity = 0;
 		const cartList = this.props.cart.map(( item, index ) => {
-				total = total + item.price;
+				total = (total + item.price*item.quantity);
+				totalQuantity = totalQuantity +item.quantity;
 				return (
 					<div key={index} className="item-in-cart">
 						<img src={`/images/${item.filename}`} alt="item" className="pull-left "/>
 						<div style={{ color: "#767676"}}>
-							{item.name}
+							{item.name +' (x' + item.quantity+ ')'}
 							<i className="fa fa-times-circle" aria-hidden="true" onClick={ () => this.props.removeFromCart(item)}></i>
 							<br/> <i className="fa fa-usd" aria-hidden="true"></i>
-							{item.price}
+							{item.price/100}
 						</div><br/>
 					</div>
 				)
 		});
 		return (
 			<div>
-				<div  className="cart-count" onClick={()=> this.openModal()}>Your Cart {this.props.cart.length}</div>
+				<div  className="cart-count" onClick={()=> this.openModal()}>Your Cart {totalQuantity}</div>
 				<Modal  isOpen={this.state.modalIsOpen}l>
 					<h1> Your Cart </h1>
 					<div  className="cart row">
 						{this.props.cart.length > 0 ? cartList : <h3>Nothing in your cart, start shopping</h3>}
 					</div>
 						<div className="total">
-							<h2><span className="pull-left"> Total:</span> <i className="fa fa-usd" aria-hidden="true"></i>  {total}</h2>
+							<h2><span className="pull-left"> Total:</span> <i className="fa fa-usd" aria-hidden="true"></i>  {total/100}</h2>
 						</div>
 						<div className="row" onClick={()=> this.closeModal()}>
 							<div className="btn btn-back">
